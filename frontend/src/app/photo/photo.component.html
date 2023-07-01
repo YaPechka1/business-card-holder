@@ -1,0 +1,12 @@
+<main>
+    <mat-spinner *ngIf="photoLoad"></mat-spinner>
+    <div *ngIf="!photoLoad" class="container">
+        <span *ngIf="photo.length==0"><mat-spinner></mat-spinner></span>
+
+        <div *ngIf="photo.length>0" class="img_container">
+            <a [href]="pathServer+'upload/photo/'+i" target="_blank" *ngFor="let i of photo; let idx=index;" class="img_cont content">
+                <img [src]="pathServer+'upload/photo/'+i" alt="">
+            </a>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,275 @@
+<main>
+    
+    <mat-tab-group class="block"  fitInkBarToContent saveContent dynamicHeight animationDuration = "0ms" mat-stretch-tabs [(selectedIndex)]="index">
+        <mat-tab label="Аккаунт" [disabled]="edit">
+            <div class="flex"> 
+            <form [formGroup]="formLogin" (ngSubmit)="onSubmitLogin()">
+                <!-- {{formPassword.get('passwordNew')?.value}} -->
+                <label for="">Текущий логин:</label><input (input)="checkLogin()" formControlName="login" type="text">
+                <label for="">Новый логин:</label><input (input)="checkLogin()" formControlName="loginNew" type="text">
+                <button class="btn-o" [disabled]="formLogin.invalid">Подтвердить</button>
+                <span *ngIf="messageLogin!=''">{{messageLogin}}</span>
+            </form>
+            <form [formGroup]="formPassword" (ngSubmit)="onSubmitPassword()">
+                <label for="">Текущий пароль:</label><input (input)="checkPassword()" formControlName="password" type="password">
+                <label for="">Новый пароль:</label><input (input)="checkPassword()" formControlName="passwordNew" type="password">
+                <label for="">Повторите новый пароль:</label><input (input)="checkPassword()" formControlName="passwordNewRep" type="password">
+                <button class="btn-o" [disabled]="formPassword.invalid">Подтвердить</button>
+                <span *ngIf="messagePassword!=''">{{messagePassword}}</span>
+            </form>
+            </div>
+            
+        </mat-tab>
+        <mat-tab label="Методички" [disabled]="edit">
+            
+            <div class="column center">
+
+                <button class="btn-o" (click)="methodInput.click()">Выберите файлы</button>
+                <input (change)="onFileSelectedMethod()" multiple="multiple" style="display:none" #methodInput
+                    accept="image/*" type="file">
+                <div class="column center">
+                    <span *ngFor="let i of methodName">{{i}}</span>
+                </div>
+                <button (click)="uploadMethod()" class="btn-o" *ngIf="methodName.length!=0"
+                    [disabled]="methodLoad">Отправить</button>
+            </div>
+            <mat-spinner *ngIf="methodLoad"></mat-spinner>
+            <div *ngIf="!methodLoad" class="container">
+                <span *ngIf="method.length==0">Пусто</span>
+                <div *ngIf="method.length>0" class="column">
+                    <div class="block content orange" *ngFor="let i of method; let idx=index;">
+                        <a [href]="pathServer+'upload/method/'+i">{{i}}</a>
+                        <mat-icon (click)="DeleteMethod(i, idx)" class="close">close</mat-icon>
+                    </div>
+                </div>
+            </div>
+            
+        </mat-tab>
+        <mat-tab label="Фото" [disabled]="edit">
+            
+            <div class="column center">
+                <button class="btn-o" (click)="photoInput.click()">Выберите файлы</button>
+                <input (change)="onFileSelectedPhoto()" multiple="multiple" style="display:none" #photoInput
+                    accept="image/*" type="file">
+                <div class="column center scroll">
+                    <span *ngFor="let i of photoName">{{i}}</span>
+                </div>
+                <button (click)="uploadPhoto()" class="btn-o" *ngIf="photoName.length!=0"
+                    [disabled]="photoLoad">Отправить</button>
+            </div>
+            <mat-spinner *ngIf="photoLoad"></mat-spinner>
+            <div *ngIf="!photoLoad" class="container">
+                <span *ngIf="photo.length==0">Пусто</span>
+                <div *ngIf="photo.length>0" class="img_container">
+                    <div *ngFor="let i of photo; let idx=index;" class="img_cont content">
+                        <img [src]="pathServer+'upload/photo/'+i" alt="">
+                        <mat-icon class="close" (click)="DeletePhoto(i, idx)">close</mat-icon>
+                    </div>
+                </div>
+            </div>
+            
+        </mat-tab>
+        <mat-tab label="Подготовка к экзамену" [disabled]="edit">
+            
+            <div class="column center">
+                <button class="btn-o" (click)="examInput.click()">Выберите файлы</button>
+                <input multiple="multiple" (change)="onFileSelectedExam()" style="display:none" #examInput type="file">
+                <div class="column center scroll">
+                    <span *ngFor="let i of examName">{{i}}</span>
+                </div>
+                <button (click)="uploadExam()" class="btn-o" *ngIf="examName.length!=0"
+                    [disabled]="examLoad">Отправить</button>
+            </div>
+            <mat-spinner *ngIf="examLoad"></mat-spinner>
+            <div *ngIf="!examLoad" class="container">
+                <span *ngIf="exam.length==0">Пусто</span>
+                <div *ngIf="exam.length>0" class="column">
+                    <div class="block content orange" *ngFor="let i of exam; let idx=index;">
+                        <a [href]="pathServer+'upload/exam/'+i">{{i}}</a>
+                        <mat-icon (click)="DeleteExam(i, idx)" class="close">close</mat-icon>
+                    </div>
+
+                </div>
+            </div>
+            
+        </mat-tab>
+        <mat-tab label="Обо мне">
+            
+            <div class="column" id="about-container">
+                <div *ngFor="let i of about.container; let idxBlock = index" class="block-content content grid"
+                    [ngStyle]="{'grid-template-columns': 'repeat('+(about.container[idxBlock].blockContent.length)+', 1fr)' }">
+                    <div *ngFor="let z of about.container[idxBlock].blockContent; let idxBlockContent=index"
+                        class="block-content-inner content column">
+                        <input type="text" [(ngModel)]="about.container[idxBlock].blockContent[idxBlockContent].header" [value]="about.container[idxBlock].blockContent[idxBlockContent].header" (input)="edit=true" placeholder="Заголовок:">
+
+                        <select (change)="about.container[idxBlock].blockContent[idxBlockContent].content=null; edit=true"
+                            [(ngModel)]="about.container[idxBlock].blockContent[idxBlockContent].type">
+                            <option [ngValue]="1">текст</option>
+                            <option [ngValue]="2">фото</option>
+                            <option [ngValue]="3">файл</option>
+                            <option [ngValue]="4">видео</option>
+                        </select>
+                        <div class="content-center" [ngSwitch]="about.container[idxBlock].blockContent[idxBlockContent].type">
+                            <!-- {{about.container[idxBlock].blockContent[idxBlockContent].type}} -->
+                            <ng-template ngSwitchCase="1">
+                                <textarea (input)="edit=true" cdkTextareaAutosize [(ngModel)]="about.container[idxBlock].blockContent[idxBlockContent].content">{{about.container[idxBlock].blockContent[idxBlockContent].content}}</textarea>
+                            </ng-template>
+                            <ng-template ngSwitchCase="2">
+                                <button *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content==null" class="btn-plus dark" (click)="photoModal=true; contentId=idxBlockContent;contentIdMain=idxBlock; edit=true">+</button>
+                                <img class="content-about" *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null" [src]="about.container[idxBlock].blockContent[idxBlockContent].content" alt="">
+                                <button *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null" class="btn-plus edit dark" (click)="photoModal=true; contentId=idxBlockContent;contentIdMain=idxBlock; edit=true"><mat-icon>edit</mat-icon></button>
+
+                            </ng-template>
+                            <ng-template ngSwitchCase="3">
+                                <button *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content==null;" class="btn-plus dark" (click)="fileModal=true; contentId=idxBlockContent;contentIdMain=idxBlock; edit=true">+</button>
+                                <a [href]="pathServer+'upload/content/files/'+about.container[idxBlock].blockContent[idxBlockContent].content" class="block orange" target="_blank" *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null">{{about.container[idxBlock].blockContent[idxBlockContent].content}}</a>
+                                <button *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null" class="btn-plus edit dark" (click)="fileModal=true; contentId=idxBlockContent;contentIdMain=idxBlock; edit=true"><mat-icon>edit</mat-icon></button>
+                            </ng-template>
+                            <ng-template ngSwitchCase="4">
+                                <button *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content==null" class="btn-plus dark" (click)="videoModal=true; contentId=idxBlockContent;contentIdMain=idxBlock; edit=true">+</button>
+                                <video controls="true" class="content-about" *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null" [src]="about.container[idxBlock].blockContent[idxBlockContent].content"></video>
+                                <button *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null" class="btn-plus edit dark" (click)="videoModal=true; contentId=idxBlockContent;contentIdMain=idxBlock; edit=true"><mat-icon>edit</mat-icon></button>
+                            </ng-template>
+                        </div>
+                        <mat-icon (click)="deleteAboutInner(idxBlock,idxBlockContent); edit=true" class="close dowm">delete</mat-icon>
+                    </div>
+                    <mat-icon (click)="deleteAbout(idxBlock); edit=true" class="close">close</mat-icon>
+                    <button class="btn-plus dark" *ngIf="about.container[idxBlock].blockContent.length<4" (click)="about.pushNewInnerBlock(idxBlock);edit=true" 
+                    [ngStyle]="{
+                        'grid-column':'1/'+(about.container[idxBlock].blockContent.length+1),
+                        'min-height':'100px'
+                    }">+</button>
+                </div>
+                <button class="btn-plus" (click)="about.pushNew(); edit=true">+</button>
+            </div>
+            
+        </mat-tab>
+        <mat-tab label="Контент" [disabled]="edit">
+            
+            <mat-tab-group fitInkBarToContent mat-stretch-tabs  saveContent dynamicHeight animationDuration = "0ms" >
+                <mat-tab label="Фото">
+                    
+                    <div class="column center">
+                        <button class="btn-o" (click)="photoContentInput.click()">Выберите файлы</button>
+                        <input (change)="onFileSelectedContentPhoto()" multiple="multiple" style="display:none" #photoContentInput
+                            accept="image/*" type="file">
+                        <div class="column center scroll">
+                            <span *ngFor="let i of photoContent;">{{i}}</span>
+                        </div>
+                        <button (click)="uploadContentPhoto()" class="btn-o" *ngIf="photoContent.length!=0"
+                            [disabled]="photoContentLoad">Отправить</button>
+                    </div>
+                    <mat-spinner *ngIf="photoContentLoad"></mat-spinner>
+            <div *ngIf="!photoContentLoad" class="container">
+                <span *ngIf="photoContentPage.length==0">Пусто</span>
+
+                <div *ngIf="photoContentPage.length>0" class="img_container">
+                    <div *ngFor="let i of photoContentPage; let idx=index;" class="img_cont content">
+                        <img [src]="pathServer+'upload/content/photo/'+i" alt="">
+                        <mat-icon class="close" (click)="DeletePhotoContent(i, idx)">close</mat-icon>
+                    </div>
+                </div>
+            </div>
+            
+                </mat-tab>
+                <mat-tab label="Видео">
+                    
+                    <div class="column center">
+                        <button class="btn-o" (click)="videoContentInput.click()">Выберите файлы</button>
+                        <input (change)="onFileSelectedContentVideo()" multiple="multiple" style="display:none" #videoContentInput
+                            accept="video/*" type="file">
+                        <div class="column center scroll">
+                            <span *ngFor="let i of videoContent;">{{i}}</span>
+                        </div>
+                        <button (click)="uploadContentVideo()" class="btn-o" *ngIf="videoContent.length!=0"
+                            [disabled]=" videoContentLoad">Отправить</button>
+                    </div>
+                    <mat-spinner *ngIf="videoContentLoad"></mat-spinner>
+            <div *ngIf="!videoContentLoad" class="container">
+                <span *ngIf="videoContentPage.length==0">Пусто</span>
+
+                <div *ngIf="videoContentPage.length>0" class="img_container">
+                    <div *ngFor="let i of videoContentPage; let idx=index;" class="img_cont content">
+                        <video controls [src]="pathServer+'upload/content/video/'+i"></video>
+                        <mat-icon class="close" (click)="DeleteVideoContent(i, idx)">close</mat-icon>
+                    </div>
+                </div>
+            </div>
+            
+                </mat-tab>
+                <mat-tab label="Файлы">
+                    
+                    <div class="column center">
+                        <button class="btn-o" (click)="fileContentInput.click()">Выберите файлы</button>
+                        <input (change)="onFileSelectedContentFile()" multiple="multiple" style="display:none" #fileContentInput
+                            type="file">
+                        <div class="column center scroll">
+                            <span *ngFor="let i of fileContent;">{{i}}</span>
+                        </div>
+                        <button (click)="uploadContentFile()" class="btn-o" *ngIf="fileContent.length!=0"
+                            [disabled]="fileContentLoad">Отправить</button>
+                    </div>
+                    <mat-spinner *ngIf="fileContentLoad"></mat-spinner>
+                    <div *ngIf="!fileContentLoad" class="container">
+                        <span *ngIf="fileContentPage.length==0">Пусто</span>
+                        <div *ngIf="fileContentPage.length>0" class="column">
+                            <div class="block content orange" *ngFor="let i of fileContentPage; let idx=index;">
+                                <a [href]="pathServer+'upload/content/files/'+i">{{i}}</a>
+                                <mat-icon (click)="DeleteFileContent(i, idx)" class="close">close</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </mat-tab>
+            </mat-tab-group>
+            
+        </mat-tab>
+    </mat-tab-group>
+</main>
+
+<div *ngIf="photoModal" class="window">
+    <div class="block">
+        <span *ngIf="photoContentPage.length==0">Пусто</span>
+
+                <div *ngIf="photoContentPage.length>0" class="img_container">
+                    <div *ngFor="let i of photoContentPage; let idx=index;" class="img_cont content">
+                        <img [src]="pathServer+'upload/content/photo/'+i" alt="" (click)="about.container[contentIdMain].blockContent[contentId].content=pathServer+'upload/content/photo/'+i; photoModal=false;">
+                    </div>
+                </div>
+                <mat-icon (click)="photoModal=false;" class="close">close</mat-icon>
+    </div>
+</div>
+<div *ngIf="videoModal" class="window">
+    <div class="block">
+        <span *ngIf="videoContentPage.length==0">Пусто</span>
+
+                <div *ngIf="videoContentPage.length>0" class="img_container">
+                    <div *ngFor="let i of videoContentPage; let idx=index;" class="content">
+                        <div class="content-center">
+                        <video class="content-about" controls="false" [src]="pathServer+'upload/content/video/'+i" ></video>
+                        <button class="btn-o" (click)="about.container[contentIdMain].blockContent[contentId].content=pathServer+'upload/content/video/'+i; videoModal=false;">Выбрать</button>
+                    </div>
+                    </div>
+                </div>
+                <mat-icon (click)="videoModal=false;" class="close">close</mat-icon>
+    </div>
+</div>
+<div *ngIf="fileModal" class="window">
+    <div class="block">
+        <span *ngIf="fileContentPage.length==0">Пусто</span>
+
+                <div *ngIf="fileContentPage.length>0" class="content-center">
+                        <a *ngFor="let i of fileContentPage; let idx=index;" [href]="pathServer+'upload/content/files/'+i" class="block orange flex"><span>{{i}}</span> <button class="btn-b" (click)="about.container[contentIdMain].blockContent[contentId].content=i; fileModal=false;">Выбрать</button></a>
+                        
+                </div>
+                <mat-icon (click)="fileModal=false;" class="close">close</mat-icon>
+    </div>
+</div>
+<div *ngIf="index==4" (click)="setAbout(); edit=false" [ngClass]="{
+    'red': edit 
+}" class="save">
+    <mat-icon>save</mat-icon>
+</div>
+<div class="exit" (click)="Exit()">
+    <mat-icon>exit_to_app</mat-icon>
+</div>

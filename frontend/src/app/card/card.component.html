@@ -1,0 +1,42 @@
+<main>
+    <div *ngFor="let i of about.container; let idxBlock = index" class="container">
+        <div *ngFor="let z of about.container[idxBlock].blockContent; let idxBlockContent=index"
+            [ngSwitch]="about.container[idxBlock].blockContent[idxBlockContent].type" [ngStyle]="{
+            width: (about.container[idxBlock].blockContent[idxBlockContent].type==1 || about.container[idxBlock].blockContent[idxBlockContent].type==3) ? '100%':'auto'
+        }">
+            <ng-template ngSwitchCase="1">
+                <div class="block">
+                    <h4 class="upText">{{about.container[idxBlock].blockContent[idxBlockContent].header}}</h4>
+                    <p>{{about.container[idxBlock].blockContent[idxBlockContent].content}}</p>
+                </div>
+            </ng-template>
+            <ng-template ngSwitchCase="2">
+                <div class="block blockContent" *ngIf="about.container[idxBlock].blockContent[idxBlockContent].header!=''"><h4>{{about.container[idxBlock].blockContent[idxBlockContent].header}}</h4></div>
+                <img class="content-about" *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null"
+                    [src]="about.container[idxBlock].blockContent[idxBlockContent].content" alt="" [ngStyle]="{
+                            'max-width': (about.container[idxBlock].blockContent.length<=2) ? 'none':'100%',
+                            'height': (about.container[idxBlock].blockContent.length<=2) ? '270px':'auto',
+                            'max-height':(about.container[idxBlock].blockContent.length<=2)?'none':'450px'
+                        }
+                        ">
+            </ng-template>
+            <ng-template ngSwitchCase="3">
+                <div class="block blockContent" *ngIf="about.container[idxBlock].blockContent[idxBlockContent].header!=''"><h4>{{about.container[idxBlock].blockContent[idxBlockContent].header}}</h4></div>
+                <a [href]="pathServer+'upload/content/files/'+about.container[idxBlock].blockContent[idxBlockContent].content"
+                    class="block orange" target="_blank"
+                    style="text-decoration: underline;"
+                    *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null">{{about.container[idxBlock].blockContent[idxBlockContent].content}}</a>
+            </ng-template>
+            <ng-template ngSwitchCase="4">
+                <div class="block blockContent" *ngIf="about.container[idxBlock].blockContent[idxBlockContent].header!=''"><h4>{{about.container[idxBlock].blockContent[idxBlockContent].header}}</h4></div>
+                <video controls="true" class="content-about"
+                    *ngIf="about.container[idxBlock].blockContent[idxBlockContent].content!=null"
+                    [src]="about.container[idxBlock].blockContent[idxBlockContent].content" [ngStyle]="{
+                            'max-width': (about.container[idxBlock].blockContent.length<=2) ? 'none':'100%',
+                            'height': (about.container[idxBlock].blockContent.length<=2) ? '270px':'auto',
+                            'max-height':(about.container[idxBlock].blockContent.length<=2)?'none':'450px'
+                        }"></video>
+            </ng-template>
+        </div>
+    </div>
+</main>

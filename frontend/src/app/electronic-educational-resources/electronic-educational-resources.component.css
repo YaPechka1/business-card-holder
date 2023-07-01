@@ -1,0 +1,27 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    min-width: 275px;
+}
+.column{
+    width: 100%;
+    gap:5px
+}
+.orange{
+    width: 100%;
+    background-color: #95599D;
+    display: block;
+    box-shadow: none;
+}
+
+span{
+    font-size: 26px;
+    color: white;
+    font-weight: 700;
+}
+a{
+    word-break: break-word;
+}

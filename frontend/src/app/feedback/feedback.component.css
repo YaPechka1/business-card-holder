@@ -1,0 +1,19 @@
+.container,.flex{
+    justify-content: center;
+    align-items: center;
+}
+.flex{
+    /* width: 600px; */
+    /* height: 1000px; */
+}
+.column{
+    align-items: center;
+}
+.block{
+    background-color: whitesmoke;
+    padding: 5px;
+    width: auto;
+}
+h2{
+    color: #419fd2;
+}

@@ -1,0 +1,11 @@
+<main>
+    <div class="block">
+        <h2>Авторизация</h2>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <label for="">Логин:</label><input formControlName="login" type="text">
+            <label for="">Пароль:</label><input formControlName="password" type="password">
+            <button class="btn-o">Войти</button>
+            <span *ngIf="message!=''">{{message}}</span>
+        </form>
+    </div>
+</main>

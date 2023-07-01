@@ -1,0 +1,11 @@
+<main>
+    <mat-spinner *ngIf="methodLoad"></mat-spinner>
+    <div *ngIf="!methodLoad" class="container">
+        <span *ngIf="method.length==0"><mat-spinner></mat-spinner></span>
+        <div *ngIf="method.length>0" class="column">
+            <div class="block content orange" *ngFor="let i of method; let idx=index;">
+                <a [href]="pathServer+'upload/method/'+i">{{i}}</a>
+            </div>
+        </div>
+    </div>
+</main>

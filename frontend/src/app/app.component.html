@@ -1,0 +1,101 @@
+<mat-drawer-container>
+  
+  <header>
+    <div class="logo">
+      <img src="./../assets/content/logo.png" alt=""><a routerLink="">Сайт <br> Визитка</a>
+    </div>
+    <nav *ngIf="width>1500">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Главная <div class="line">
+        </div></a>
+      <a routerLink="/card" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Обо мне<div class="line">
+        </div></a>
+      <a routerLink="/methodical_piggy_bank" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact:true}">Методички<div class="line"></div></a>
+      <a routerLink="/photo" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Фото<div class="line">
+        </div></a>
+      <a routerLink="/electronic_educational_resources" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact:true}">Подготовка к экзамену<div class="line"></div></a>
+      <a *ngIf="auth.isEnter() && width>=1250" routerLink="/admin" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact:true}">Администрирование<div class="line"></div></a>
+      <a [matMenuTriggerFor]="menu" (onMenuOpen)="opened=true" (onMenuClose)="opened=false">Связь <mat-icon
+          [ngClass]="{rorate: opened}">keyboard_arrow_down</mat-icon>
+        <div class="line"></div>
+      </a>
+    </nav>
+    <nav *ngIf="width<1500">
+      <a [ngClass]="{rorate: drawer.opened}" (click)="drawer.toggle()">
+        <mat-icon>
+          menu
+        </mat-icon>
+      </a>
+    </nav>
+    
+  </header>
+  <router-outlet></router-outlet>
+  <mat-menu #menu="matMenu">
+    <button class="item" href="" mat-menu-item>
+      <mat-icon svgIcon="google"></mat-icon>
+      <span>google</span>
+    </button>
+    <button class="item" href="" mat-menu-item>
+      <mat-icon svgIcon="vk"></mat-icon>
+      <span>VK</span>
+    </button>
+    <button class="item" href="" mat-menu-item>
+      <mat-icon svgIcon="ok"></mat-icon>
+      <span>OK</span>
+    </button>
+    <button class="item" routerLink="/feedback" mat-menu-item>
+      <mat-icon>feedback</mat-icon>
+      <span>Форма обратной связи</span>
+    </button>
+  </mat-menu>
+  <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+    <div class="list-container">
+      <mat-nav-list>
+        <button class="item" routerLink="/" (click)="drawer.toggle()" mat-menu-item>
+          <mat-icon>home</mat-icon>
+          <span>Главная</span>
+        </button>
+        <button class="item" routerLink="/card" (click)="drawer.toggle()" mat-menu-item>
+          <mat-icon>person</mat-icon>
+          <span>Обо мне</span>
+        </button>
+        <button class="item" routerLink="/photo" (click)="drawer.toggle()" mat-menu-item>
+          <mat-icon>photo</mat-icon>
+          <span>Фото</span>
+        </button>
+        <button class="item" routerLink="/methodical_piggy_bank" (click)="drawer.toggle()" mat-menu-item>
+          <mat-icon>more</mat-icon>
+          <span>Методички</span>
+        </button>
+        <button class="item" routerLink="/electronic_educational_resources" (click)="drawer.toggle()" mat-menu-item>
+          <mat-icon>book</mat-icon>
+          <span>Подготовка к экзаменам</span>
+        </button>
+        <button *ngIf="auth.isEnter() && width>=1250" class="item" routerLink="/admin" (click)="drawer.toggle()" mat-menu-item>
+          <mat-icon>school</mat-icon>
+          <span>Администрирование</span>
+        </button>
+      </mat-nav-list>
+      <mat-nav-list>
+        <button class="item" href="" mat-menu-item>
+          <mat-icon svgIcon="google"></mat-icon>
+          <span>google</span>
+        </button>
+        <button class="item" href="" mat-menu-item>
+          <mat-icon svgIcon="vk"></mat-icon>
+          <span>VK</span>
+        </button>
+        <button class="item" href="" mat-menu-item>
+          <mat-icon svgIcon="ok"></mat-icon>
+          <span>OK</span>
+        </button>
+        <button class="item" routerLink="/feedback" (click)="drawer.toggle()" mat-menu-item>
+          <mat-icon>feedback</mat-icon>
+          <span>Форма обратной связи</span>
+        </button>
+      </mat-nav-list>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>

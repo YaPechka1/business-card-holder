@@ -1,0 +1,11 @@
+<main>
+    <mat-spinner *ngIf="examLoad"></mat-spinner>
+    <div *ngIf="!examLoad" class="container">
+        <span *ngIf="exam.length==0"><mat-spinner></mat-spinner></span>
+        <div *ngIf="exam.length>0" class="column">
+            <div class="block content orange" *ngFor="let i of exam; let idx=index;">
+                <a [href]="pathServer+'upload/exam/'+i">{{i}}</a>
+            </div>
+        </div>
+    </div>
+</main>
