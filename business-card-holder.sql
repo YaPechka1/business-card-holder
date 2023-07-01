@@ -52,7 +52,7 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id_user`, `login`, `password`) VALUES
 (1, 'root', 'e807f1fcf82d132f9bb018ca6738a19f');
 
---
+--root 1234567890
 -- Индексы сохранённых таблиц
 --
 
